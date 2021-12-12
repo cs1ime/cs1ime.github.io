@@ -24,11 +24,11 @@
   <entry>
     <title>VT 技术学习 (一) 检测支持与VMXON</title>
     <url>/2021/12/09/VT-%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0-%E4%B8%80-%E6%A3%80%E6%B5%8B%E6%94%AF%E6%8C%81%E4%B8%8EVMXON/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2></li>
-<li><p><strong>对于部分反作弊对R3注入的强检测,R0层的技术已经无力应对了,必须得学会hypervisor了</strong></p>
-</li>
-<li><p><strong>本次学习主要参考<a href="https://space.bilibili.com/37877654/?spm_id_from=333.999.0.0">bilibili周壑老师的教程</a>,hyperplatform代码,书籍《处理器虚拟化技术》</strong></p>
-</li>
+    <content><![CDATA[</li>
+</ul>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ul>
+<li><strong>对于部分反作弊对R3注入的强检测,R0层的技术已经无力应对了,必须得学会hypervisor了</strong></li>
+<li><strong>本次学习主要参考<a href="https://space.bilibili.com/37877654/?spm_id_from=333.999.0.0">bilibili周壑老师的教程</a>,hyperplatform代码,书籍《处理器虚拟化技术》</strong></li>
 </ul>
 <h2 id="VT框架流程"><a href="#VT框架流程" class="headerlink" title="VT框架流程"></a>VT框架流程</h2><p><img src="/img/VT%20%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0%20(%E4%B8%80)%20%E6%A3%80%E6%B5%8B%E6%94%AF%E6%8C%81%E4%B8%8EVMXON%20321f27818efb4d72835ff5b483a7725a/Untitled.png" alt="Untitled"></p>
 <ul>
