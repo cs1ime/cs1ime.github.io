@@ -24,12 +24,8 @@
   <entry>
     <title>VT 技术学习 (一) 检测支持与VMXON</title>
     <url>/2021/12/09/VT-%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0-%E4%B8%80-%E6%A3%80%E6%B5%8B%E6%94%AF%E6%8C%81%E4%B8%8EVMXON/</url>
-    <content><![CDATA[</li>
-</ul>
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ul>
-<li><strong>对于部分反作弊对R3注入的强检测,R0层的技术已经无力应对了,必须得学会hypervisor了</strong></li>
-<li><strong>本次学习主要参考<a href="https://space.bilibili.com/37877654/?spm_id_from=333.999.0.0">bilibili周壑老师的教程</a>,hyperplatform代码,书籍《处理器虚拟化技术》</strong></li>
-</ul>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>对于部分反作弊对R3注入的强检测,R0层的技术已经无力应对了,必须得学会hypervisor了</p>
+<p>本次学习主要参考<a href="https://space.bilibili.com/37877654/?spm_id_from=333.999.0.0">bilibili周壑老师的教程</a>,hyperplatform代码,书籍《处理器虚拟化技术》</p>
 <h2 id="VT框架流程"><a href="#VT框架流程" class="headerlink" title="VT框架流程"></a>VT框架流程</h2><p><img src="/img/VT%20%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0%20(%E4%B8%80)%20%E6%A3%80%E6%B5%8B%E6%94%AF%E6%8C%81%E4%B8%8EVMXON%20321f27818efb4d72835ff5b483a7725a/Untitled.png" alt="Untitled"></p>
 <ul>
 <li><del><strong>本人の粗略理解</strong>: 相比于直接用cpu模拟出的VMM,VT技术能使得Guest原生运行大部分指令,让虚拟机的性能得到巨大提升,并且能让虚拟机支持一些CPU的硬件特性</del></li>
@@ -37,15 +33,18 @@
 <h2 id="检测CPU是否能使用VT指令集"><a href="#检测CPU是否能使用VT指令集" class="headerlink" title="检测CPU是否能使用VT指令集"></a>检测CPU是否能使用VT指令集</h2><p>在此之前先需要了解一下SMX是个什么东西</p>
 <h3 id="SMX"><a href="#SMX" class="headerlink" title="SMX"></a>SMX</h3><ul>
 <li>SMX是面向 <strong>intel TXT(可信执行技术)</strong> 平台的编程接口,主要指令是<code>GETSEC</code></li>
-<li>SMX指令集由<code>IA32_FEATURE_CONTROL MSR</code>决定是否开启,<strong>该MSR是不可写的</strong></li>
+<li>SMX指令集由 <code>IA32_FEATURE_CONTROL MSR</code> 决定是否开启,<strong>该MSR是不可写的</strong></li>
 </ul>
-<p>相关资料: </p>
-<ul>
-<li><p><strong>intel手册 volume2 CHAPTER 6 SAFER MODE EXTENSIONS REFERENCE</strong></p>
+<blockquote>
+<p> 相关资料: </p>
+<ol>
+<li><p>intel手册 volume2 CHAPTER 6 SAFER MODE EXTENSIONS REFERENCE</p>
 </li>
 <li><p><a href="https://www.intel.com/content/dam/www/public/us/en/documents/white-papers/trusted-execution-technology-security-paper.pdf"><strong>Intel® Trusted Execution Technology Hardware-based Technology for Enhancing Server Platform Security</strong></a></p>
 </li>
-</ul>
+</ol>
+</blockquote>
+<hr>
 <h3 id="IA32-FEATURE-CONTROL-结构"><a href="#IA32-FEATURE-CONTROL-结构" class="headerlink" title="IA32_FEATURE_CONTROL 结构"></a>IA32_FEATURE_CONTROL 结构</h3><p><img src="/img/VT%20%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0%20(%E4%B8%80)%20%E6%A3%80%E6%B5%8B%E6%94%AF%E6%8C%81%E4%B8%8EVMXON%20321f27818efb4d72835ff5b483a7725a/Untitled%201.png" alt="Untitled"></p>
 <h3 id="检测支持"><a href="#检测支持" class="headerlink" title="检测支持"></a>检测支持</h3><ol>
 <li>执行cpuid(eax=1)指令,返回的ecx第5位为1说明cpu支持vt指令集</li>
@@ -73,7 +72,9 @@
 <li><p>vmxon执行之后cpu进入<strong>vmx操作模式</strong>,期间<code>CR4.VMXE</code>不可设为0,否则会触发#GP,可以用<code>vmxoff</code>指令退出<strong>vmx操作模式</strong>,如果没有执行到<code>vmlanuch</code>,不会对系统正常运行造成影响</p>
 </li>
 </ol>
-<p>相关资料: <strong><code>intel手册 volume3 31.5 VMM SETUP &amp; TEAR DOWN</code></strong></p>
+<blockquote>
+<p>相关资料:  <strong>intel手册 volume3 31.5 VMM SETUP &amp; TEAR DOWN</strong></p>
+</blockquote>
 <p>如发现本人有误解,请各位师傅们指出教导一下</p>]]></content>
       <categories>
         <category>vmx</category>
