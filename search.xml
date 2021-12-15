@@ -146,7 +146,7 @@
 </ul>
 <h3 id="文件读写高级I-O"><a href="#文件读写高级I-O" class="headerlink" title="文件读写高级I/O"></a>文件读写高级I/O</h3><ul>
 <li><code>readv</code>,<code>writev</code> 可以一次操作多个缓冲区,提升效率,最多缓冲区个数定义在<code>UIO_MAXIOV</code> 中</li>
-<li>高级I/O也有<code>preadv</code>,<code>pwritev</code>,<code>preadv64</code>,<code>pwritev64</code></li>
+<li>高级I/O函数也有<code>preadv</code>,<code>pwritev</code>,<code>preadv64</code>,<code>pwritev64</code></li>
 </ul>
 <h3 id="uid"><a href="#uid" class="headerlink" title="uid"></a>uid</h3><ul>
 <li>uid10000以上是app,1000是系统软件,0是root</li>
