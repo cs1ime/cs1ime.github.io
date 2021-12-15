@@ -20,19 +20,22 @@
     var CONFIG = {"hostname":"mapdrv.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.">
+  <meta name="description" content="Android Studio NDK工程配置 POSIX标准UNIX开发">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="https://mapdrv.com/2021/12/06/hello-world/index.html">
+<meta property="og:title" content="NDK学习2-UNIX开发">
+<meta property="og:url" content="https://mapdrv.com/2021/12/15/NDK%E5%AD%A6%E4%B9%A02-UNIX%E5%BC%80%E5%8F%91/index.html">
 <meta property="og:site_name" content="九月">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.">
+<meta property="og:description" content="Android Studio NDK工程配置 POSIX标准UNIX开发">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-12-06T07:37:50.810Z">
-<meta property="article:modified_time" content="2021-12-13T04:49:52.561Z">
+<meta property="og:image" content="https://mapdrv.com/img/NDK2%20UNIX%E5%BC%80%E5%8F%91%20a07fe7748890495aa3652d4b16d17b80/Untitled.png">
+<meta property="og:image" content="https://mapdrv.com/img/NDK2%20UNIX%E5%BC%80%E5%8F%91%20a07fe7748890495aa3652d4b16d17b80/Untitled%201.png">
+<meta property="article:published_time" content="2021-12-15T13:33:07.000Z">
+<meta property="article:modified_time" content="2021-12-15T13:42:35.556Z">
 <meta property="article:author" content="九月">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mapdrv.com/img/NDK2%20UNIX%E5%BC%80%E5%8F%91%20a07fe7748890495aa3652d4b16d17b80/Untitled.png">
 
-<link rel="canonical" href="https://mapdrv.com/2021/12/06/hello-world/">
+<link rel="canonical" href="https://mapdrv.com/2021/12/15/NDK%E5%AD%A6%E4%B9%A02-UNIX%E5%BC%80%E5%8F%91/">
 
 
 <script id="page-configurations">
@@ -45,7 +48,7 @@
   };
 </script>
 
-  <title>Hello World | 九月</title>
+  <title>NDK学习2-UNIX开发 | 九月</title>
   
 
 
@@ -177,7 +180,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://mapdrv.com/2021/12/06/hello-world/">
+    <link itemprop="mainEntityOfPage" href="https://mapdrv.com/2021/12/15/NDK%E5%AD%A6%E4%B9%A02-UNIX%E5%BC%80%E5%8F%91/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/img/avatar.jpg">
@@ -190,7 +193,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Hello World
+          NDK学习2-UNIX开发
         </h1>
 
         <div class="post-meta">
@@ -199,23 +202,17 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2021-12-06 15:37:50" itemprop="dateCreated datePublished" datetime="2021-12-06T15:37:50+08:00">2021-12-06</time>
+              <time title="创建时间：2021-12-15 21:33:07 / 修改时间：21:42:35" itemprop="dateCreated datePublished" datetime="2021-12-15T21:33:07+08:00">2021-12-15</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-13 12:49:52" itemprop="dateModified" datetime="2021-12-13T12:49:52+08:00">2021-12-13</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/dev/" itemprop="url" rel="index"><span itemprop="name">dev</span></a>
+                  <a href="/categories/android/" itemprop="url" rel="index"><span itemprop="name">android</span></a>
                 </span>
             </span>
 
@@ -230,19 +227,58 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+        <p>android_mk说明 <a target="_blank" rel="noopener" href="https://developer.android.google.cn/ndk/guides/android_mk">https://developer.android.google.cn/ndk/guides/android_mk</a></p>
+<h3 id="NDK中使用C"><a href="#NDK中使用C" class="headerlink" title="NDK中使用C++"></a>NDK中使用C++</h3><p><a target="_blank" rel="noopener" href="https://developer.android.google.cn/ndk/guides/cpp-support">https://developer.android.google.cn/ndk/guides/cpp-support</a></p>
+<ul>
+<li>如想要整个项目支持使用c++,可以在<code>Application.mk</code>添加<code>APP_STL := c++_static</code></li>
+</ul>
+<p><code>c++_static</code> 可以使得so自带C++STL库,使用 <code>c++_shared</code>选项会在生成目录下多出一个<code>libc++_shared.so</code>的C++STL库文件</p>
+<ul>
+<li>如想要整个项目支持c++异常,可以在<code>Application.mk</code>添加<code>APP_CPPFLAGS := -fexceptions</code>,部分版本ndk需要在gradle里添加<code>cppFlags &#39;-frtti&#39;</code>才可使用异常</li>
+<li>如果想要改c++标准, 添加cppFlags <code>cppFlags &#39;-std=c++11&#39;</code></li>
+</ul>
+<h3 id="AS-NDK项目"><a href="#AS-NDK项目" class="headerlink" title="AS NDK项目"></a>AS NDK项目</h3><ul>
+<li>可以在gradle里加上 <code>abiFilters &quot;x86&quot;,&quot;x86_64&quot;</code> 来限制编译指令平台</li>
+</ul>
+<p><img src="/img/NDK2%20UNIX%E5%BC%80%E5%8F%91%20a07fe7748890495aa3652d4b16d17b80/Untitled.png" alt="Untitled"></p>
+<h2 id="Android-Linux开发"><a href="#Android-Linux开发" class="headerlink" title="Android Linux开发"></a>Android Linux开发</h2><ul>
+<li>POSIX标准是最基本的开发接口,大部分操作系统都支持</li>
+<li><code>thread_local</code>关键字可定义一个TLS变量,解决线程安全的问题</li>
+<li>unix编程推荐查询书籍 <strong>《Linux/UNIX系统编程手册》</strong></li>
+</ul>
+<h3 id="erron"><a href="#erron" class="headerlink" title="erron"></a>erron</h3><ul>
+<li>和windows的GetLastError机制类似,linux使用<code>errno</code>全局变量存储api调用失败的错误码,头文件引用<code>#include &lt;errno.h&gt;</code> 即可引用该变量,errno是一个线程安全的变量</li>
+<li><code>strerror</code>可以把errno转换成对应字符串</li>
+<li><code>perror</code>可以直接打印出errno对应字符串</li>
+</ul>
+<h3 id="文件读写"><a href="#文件读写" class="headerlink" title="文件读写"></a>文件读写</h3><ul>
+<li><code>pread</code>和<code>pwrite</code>可以不用移动文件指针来读写文件</li>
+<li>读写2G以上的文件需要用<code>open64</code>打开</li>
+</ul>
+<h3 id="文件读写高级I-O"><a href="#文件读写高级I-O" class="headerlink" title="文件读写高级I/O"></a>文件读写高级I/O</h3><ul>
+<li><code>readv</code>,<code>writev</code> 可以一次操作多个缓冲区,提升效率,最多缓冲区个数定义在<code>UIO_MAXIOV</code> 中</li>
+<li>高级I/O也有<code>preadv</code>,<code>pwritev</code>,<code>preadv64</code>,<code>pwritev64</code></li>
+</ul>
+<h3 id="uid"><a href="#uid" class="headerlink" title="uid"></a>uid</h3><ul>
+<li>uid10000以上是app,1000是系统软件,0是root</li>
+<li><code>getpwuid</code>函数可以获取uid对应的用户名</li>
+<li><code>getgrgid</code>函数可以获取gid对应的组名</li>
+</ul>
+<h3 id="模式"><a href="#模式" class="headerlink" title="模式"></a>模式</h3><p>文件模式值结构</p>
+<p>T:不允许别人删除</p>
+<p>G:允许setgid</p>
+<p>S:允许setuid</p>
+<p><img src="/img/NDK2%20UNIX%E5%BC%80%E5%8F%91%20a07fe7748890495aa3652d4b16d17b80/Untitled%201.png" alt="Untitled"></p>
+<ul>
+<li>文件权限部分可以用8进制输出(格式化字符%o)以3位为间隔查看</li>
+<li>文件类型部分由如下常量组成</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//这里的数值都是8进制</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFMT 00170000</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFSOCK 0140000</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFLNK 0120000</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFREG 0100000</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFBLK 0060000</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFDIR 0040000</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFCHR 0020000</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFIFO 0010000</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//测试宏</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_ISLNK(m) (((m) &amp; S_IFMT) == S_IFLNK)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_ISREG(m) (((m) &amp; S_IFMT) == S_IFREG)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_ISDIR(m) (((m) &amp; S_IFMT) == S_IFDIR)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_ISCHR(m) (((m) &amp; S_IFMT) == S_IFCHR)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_ISBLK(m) (((m) &amp; S_IFMT) == S_IFBLK)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_ISFIFO(m) (((m) &amp; S_IFMT) == S_IFIFO)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_ISSOCK(m) (((m) &amp; S_IFMT) == S_IFSOCK)</span></span><br></pre></td></tr></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+<ul>
+<li><code>access</code>函数可以检查当前进程对文件是否有某个权限</li>
+<li><code>/system/</code>目录是只读挂载的,手机root之后可以解锁该目录的写权限</li>
+</ul>
     </div>
 
     
@@ -256,11 +292,11 @@
 
         
     <div class="post-nav">
-      <div class="post-nav-item"></div>
       <div class="post-nav-item">
-    <a href="/2021/12/09/VT-%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0-%E4%B8%80-%E6%A3%80%E6%B5%8B%E6%94%AF%E6%8C%81%E4%B8%8EVMXON/" rel="next" title="VT 技术学习 (一) 检测支持与VMXON">
-      VT 技术学习 (一) 检测支持与VMXON <i class="fa fa-chevron-right"></i>
+    <a href="/2021/12/15/NDK%E5%AD%A6%E4%B9%A01-NDK%E7%BC%96%E8%AF%91%E8%B0%83%E8%AF%95/" rel="prev" title="NDK学习1-NDK编译调试">
+      <i class="fa fa-chevron-left"></i> NDK学习1-NDK编译调试
     </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -319,7 +355,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Quick-Start"><span class="nav-number">1.</span> <span class="nav-text">Quick Start</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Create-a-new-post"><span class="nav-number">1.1.</span> <span class="nav-text">Create a new post</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Run-server"><span class="nav-number">1.2.</span> <span class="nav-text">Run server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Generate-static-files"><span class="nav-number">1.3.</span> <span class="nav-text">Generate static files</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deploy-to-remote-sites"><span class="nav-number">1.4.</span> <span class="nav-text">Deploy to remote sites</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#NDK%E4%B8%AD%E4%BD%BF%E7%94%A8C"><span class="nav-number">1.</span> <span class="nav-text">NDK中使用C++</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AS-NDK%E9%A1%B9%E7%9B%AE"><span class="nav-number">2.</span> <span class="nav-text">AS NDK项目</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android-Linux%E5%BC%80%E5%8F%91"><span class="nav-number"></span> <span class="nav-text">Android Linux开发</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#erron"><span class="nav-number">1.</span> <span class="nav-text">erron</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E8%AF%BB%E5%86%99"><span class="nav-number">2.</span> <span class="nav-text">文件读写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E8%AF%BB%E5%86%99%E9%AB%98%E7%BA%A7I-O"><span class="nav-number">3.</span> <span class="nav-text">文件读写高级I&#x2F;O</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#uid"><span class="nav-number">4.</span> <span class="nav-text">uid</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%BC%8F"><span class="nav-number">5.</span> <span class="nav-text">模式</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
