@@ -1,6 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>NDK学习1-NDK编译调试</title>
+    <url>/2021/12/15/NDK%E5%AD%A6%E4%B9%A01-NDK%E7%BC%96%E8%AF%91%E8%B0%83%E8%AF%95/</url>
+    <content><![CDATA[<p>ndk下载 <a href="https://developer.android.google.cn/ndk/downloads">NDK 下载 | Android NDK | Android Developers (google.cn)</a></p>
+<h3 id="设置环境变量"><a href="#设置环境变量" class="headerlink" title="设置环境变量"></a>设置环境变量</h3><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">NDK_ROOT D:\android-ndk-r23b</span><br><span class="line">%NDK_ROOT%</span><br><span class="line">%NDK_ROOT%\toolchains\llvm\prebuilt\windows-x86_64\bin</span><br><span class="line">%NDK_ROOT%\prebuilt\windows-x86_64\bin</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>clang需要指定链接库版本, 目录<code>%NDK_ROOT%\toolchains\llvm\prebuilt\windows-x86_64\bin</code>下有对应处理器平台和安卓平台封装好的clang脚本</li>
+</ul>
+<h3 id="makefile编译脚本"><a href="#makefile编译脚本" class="headerlink" title="makefile编译脚本"></a>makefile编译脚本</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">APP_ABI := armv7a</span><br><span class="line">APP_PLT := android21</span><br><span class="line">APP_BUILD_FLAG := -c</span><br><span class="line">APP_LINKER_FLAG := </span><br><span class="line">APP_SOURCE := hello.c</span><br><span class="line">APP_NAME := hello</span><br><span class="line"></span><br><span class="line">ifeq ($(APP_ABI),x86)</span><br><span class="line">	APP_ABI := i686</span><br><span class="line"><span class="keyword">else</span> ifeq ($(APP_ABI),armv7a)</span><br><span class="line">	APP_PLT := $(subst android,androideabi,<span class="variable">$&#123;APP_PLT&#125;</span>)</span><br><span class="line">endif</span><br><span class="line"></span><br><span class="line">ifeq ($(APP_ABI),arm64)</span><br><span class="line">	APP_ABI := aarch64</span><br><span class="line">endif</span><br><span class="line"></span><br><span class="line">APP_CLANG := <span class="variable">$&#123;APP_ABI&#125;</span>-linux-<span class="variable">$&#123;APP_PLT&#125;</span>-clang</span><br><span class="line"></span><br><span class="line">all:</span><br><span class="line">	<span class="variable">$&#123;APP_CLANG&#125;</span> <span class="variable">$&#123;APP_BUILD_FLAG&#125;</span> <span class="variable">$&#123;APP_SOURCE&#125;</span></span><br><span class="line">	<span class="variable">$&#123;APP_CLANG&#125;</span> <span class="variable">$&#123;APP_LINKER_FLAG&#125;</span> -o <span class="variable">$&#123;APP_NAME&#125;</span> *.o</span><br><span class="line">install:</span><br><span class="line">	adb push hello /data/cs/hello</span><br><span class="line">	adb shell chmod 777 /data/cs/hello</span><br><span class="line">clean:</span><br><span class="line">	del *.o</span><br></pre></td></tr></table></figure>
+
+<p>make -f build.mk</p>
+<p>如果想c++兼容多平台,可以再apk包lib文件夹下新建对应指令集的文件夹,放入对应的so文件即可</p>
+<p>c/c++库最终会在apk文件里的lib目录下</p>
+<h3 id="ndk编译"><a href="#ndk编译" class="headerlink" title="ndk编译"></a>ndk编译</h3><ol>
+<li>建立一个jni文件放置整个要编译的项目</li>
+<li>建立Android.mk文件</li>
+<li>建立Application.mk文件,用来进行项目级设置</li>
+<li>运行ndk-build即可编译</li>
+</ol>
+<p>编译后产生obj文件夹和libs文件夹,<strong>obj文件夹里面存放的带符号的可执行文件,libs里是不带符号的</strong></p>
+<h3 id="ndk调试"><a href="#ndk调试" class="headerlink" title="ndk调试"></a>ndk调试</h3><ul>
+<li>ndk使用lldb进行调试,lldb-server在<code>ndk\toolchains\llvm\prebuilt\windows-x86_64\lib64\clang\12.0.8\lib\linux\i386</code>目录下,将他push进手机中</li>
+<li>lldb-server必须要root权限才能调试,使用命令<code>su</code>提权至root</li>
+<li>运行命令<code>lldb-server g 127.0.0.1:12345 /data/tmp/hello</code> ,等待调试机连接</li>
+<li>使用adb将手机调试端口映射到调试机上 <code>adb forward tcp:12345 tcp:12345</code></li>
+<li>调试机运行lldb.cmd命令,输入<code>gdb-remote 127.0.0.1:12345</code> 即可调试</li>
+<li>如需源码级调试,lldb.cmd命令后面加上带符号的可执行文件路径,如<code>lldb.cmd .\hello</code></li>
+</ul>
+<p>也可以用IDA调试</p>]]></content>
+      <categories>
+        <category>android</category>
+      </categories>
+  </entry>
+  <entry>
     <title>NDK学习2-UNIX开发</title>
     <url>/2021/12/15/NDK%E5%AD%A6%E4%B9%A02-UNIX%E5%BC%80%E5%8F%91/</url>
     <content><![CDATA[<p>android_mk说明 <a href="https://developer.android.google.cn/ndk/guides/android_mk">https://developer.android.google.cn/ndk/guides/android_mk</a></p>
@@ -55,40 +89,6 @@
 <li><code>access</code>函数可以检查当前进程对文件是否有某个权限</li>
 <li><code>/system/</code>目录是只读挂载的,手机root之后可以解锁该目录的写权限</li>
 </ul>]]></content>
-      <categories>
-        <category>android</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>NDK学习1-NDK编译调试</title>
-    <url>/2021/12/15/NDK%E5%AD%A6%E4%B9%A01-NDK%E7%BC%96%E8%AF%91%E8%B0%83%E8%AF%95/</url>
-    <content><![CDATA[<p>ndk下载 <a href="https://developer.android.google.cn/ndk/downloads">NDK 下载 | Android NDK | Android Developers (google.cn)</a></p>
-<h3 id="设置环境变量"><a href="#设置环境变量" class="headerlink" title="设置环境变量"></a>设置环境变量</h3><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">NDK_ROOT D:\android-ndk-r23b</span><br><span class="line">%NDK_ROOT%</span><br><span class="line">%NDK_ROOT%\toolchains\llvm\prebuilt\windows-x86_64\bin</span><br><span class="line">%NDK_ROOT%\prebuilt\windows-x86_64\bin</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>clang需要指定链接库版本, 目录<code>%NDK_ROOT%\toolchains\llvm\prebuilt\windows-x86_64\bin</code>下有对应处理器平台和安卓平台封装好的clang脚本</li>
-</ul>
-<h3 id="makefile编译脚本"><a href="#makefile编译脚本" class="headerlink" title="makefile编译脚本"></a>makefile编译脚本</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">APP_ABI := armv7a</span><br><span class="line">APP_PLT := android21</span><br><span class="line">APP_BUILD_FLAG := -c</span><br><span class="line">APP_LINKER_FLAG := </span><br><span class="line">APP_SOURCE := hello.c</span><br><span class="line">APP_NAME := hello</span><br><span class="line"></span><br><span class="line">ifeq ($(APP_ABI),x86)</span><br><span class="line">	APP_ABI := i686</span><br><span class="line"><span class="keyword">else</span> ifeq ($(APP_ABI),armv7a)</span><br><span class="line">	APP_PLT := $(subst android,androideabi,<span class="variable">$&#123;APP_PLT&#125;</span>)</span><br><span class="line">endif</span><br><span class="line"></span><br><span class="line">ifeq ($(APP_ABI),arm64)</span><br><span class="line">	APP_ABI := aarch64</span><br><span class="line">endif</span><br><span class="line"></span><br><span class="line">APP_CLANG := <span class="variable">$&#123;APP_ABI&#125;</span>-linux-<span class="variable">$&#123;APP_PLT&#125;</span>-clang</span><br><span class="line"></span><br><span class="line">all:</span><br><span class="line">	<span class="variable">$&#123;APP_CLANG&#125;</span> <span class="variable">$&#123;APP_BUILD_FLAG&#125;</span> <span class="variable">$&#123;APP_SOURCE&#125;</span></span><br><span class="line">	<span class="variable">$&#123;APP_CLANG&#125;</span> <span class="variable">$&#123;APP_LINKER_FLAG&#125;</span> -o <span class="variable">$&#123;APP_NAME&#125;</span> *.o</span><br><span class="line">install:</span><br><span class="line">	adb push hello /data/cs/hello</span><br><span class="line">	adb shell chmod 777 /data/cs/hello</span><br><span class="line">clean:</span><br><span class="line">	del *.o</span><br></pre></td></tr></table></figure>
-
-<p>make -f build.mk</p>
-<p>如果想c++兼容多平台,可以再apk包lib文件夹下新建对应指令集的文件夹,放入对应的so文件即可</p>
-<p>c/c++库最终会在apk文件里的lib目录下</p>
-<h3 id="ndk编译"><a href="#ndk编译" class="headerlink" title="ndk编译"></a>ndk编译</h3><ol>
-<li>建立一个jni文件放置整个要编译的项目</li>
-<li>建立Android.mk文件</li>
-<li>建立Application.mk文件,用来进行项目级设置</li>
-<li>运行ndk-build即可编译</li>
-</ol>
-<p>编译后产生obj文件夹和libs文件夹,<strong>obj文件夹里面存放的带符号的可执行文件,libs里是不带符号的</strong></p>
-<h3 id="ndk调试"><a href="#ndk调试" class="headerlink" title="ndk调试"></a>ndk调试</h3><ul>
-<li>ndk使用lldb进行调试,lldb-server在<code>ndk\toolchains\llvm\prebuilt\windows-x86_64\lib64\clang\12.0.8\lib\linux\i386</code>目录下,将他push进手机中</li>
-<li>lldb-server必须要root权限才能调试,使用命令<code>su</code>提权至root</li>
-<li>运行命令<code>lldb-server g 127.0.0.1:12345 /data/tmp/hello</code> ,等待调试机连接</li>
-<li>使用adb将手机调试端口映射到调试机上 <code>adb forward tcp:12345 tcp:12345</code></li>
-<li>调试机运行lldb.cmd命令,输入<code>gdb-remote 127.0.0.1:12345</code> 即可调试</li>
-<li>如需源码级调试,lldb.cmd命令后面加上带符号的可执行文件路径,如<code>lldb.cmd .\hello</code></li>
-</ul>
-<p>也可以用IDA调试</p>]]></content>
       <categories>
         <category>android</category>
       </categories>
