@@ -1,6 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>NDK学习2-UNIX开发</title>
+    <url>/2021/12/15/NDK%E5%AD%A6%E4%B9%A02-UNIX%E5%BC%80%E5%8F%91/</url>
+    <content><![CDATA[<p>android_mk说明 <a href="https://developer.android.google.cn/ndk/guides/android_mk">https://developer.android.google.cn/ndk/guides/android_mk</a></p>
+<h3 id="NDK中使用C"><a href="#NDK中使用C" class="headerlink" title="NDK中使用C++"></a>NDK中使用C++</h3><p><a href="https://developer.android.google.cn/ndk/guides/cpp-support">https://developer.android.google.cn/ndk/guides/cpp-support</a></p>
+<ul>
+<li>如想要整个项目支持使用c++,可以在<code>Application.mk</code>添加<code>APP_STL := c++_static</code></li>
+</ul>
+<p><code>c++_static</code> 可以使得so自带C++STL库,使用 <code>c++_shared</code>选项会在生成目录下多出一个<code>libc++_shared.so</code>的C++STL库文件</p>
+<ul>
+<li>如想要整个项目支持c++异常,可以在<code>Application.mk</code>添加<code>APP_CPPFLAGS := -fexceptions</code>,部分版本ndk需要在gradle里添加<code>cppFlags &#39;-frtti&#39;</code>才可使用异常</li>
+<li>如果想要改c++标准, 添加cppFlags <code>cppFlags &#39;-std=c++11&#39;</code></li>
+</ul>
+<h3 id="AS-NDK项目"><a href="#AS-NDK项目" class="headerlink" title="AS NDK项目"></a>AS NDK项目</h3><ul>
+<li>可以在gradle里加上 <code>abiFilters &quot;x86&quot;,&quot;x86_64&quot;</code> 来限制编译指令平台</li>
+</ul>
+<p><img src="/img/NDK2%20UNIX%E5%BC%80%E5%8F%91%20a07fe7748890495aa3652d4b16d17b80/Untitled.png" alt="Untitled"></p>
+<h2 id="Android-Linux开发"><a href="#Android-Linux开发" class="headerlink" title="Android Linux开发"></a>Android Linux开发</h2><ul>
+<li>POSIX标准是最基本的开发接口,大部分操作系统都支持</li>
+<li><code>thread_local</code>关键字可定义一个TLS变量,解决线程安全的问题</li>
+<li>unix编程推荐查询书籍 <strong>《Linux/UNIX系统编程手册》</strong></li>
+</ul>
+<h3 id="erron"><a href="#erron" class="headerlink" title="erron"></a>erron</h3><ul>
+<li>和windows的GetLastError机制类似,linux使用<code>errno</code>全局变量存储api调用失败的错误码,头文件引用<code>#include &lt;errno.h&gt;</code> 即可引用该变量,errno是一个线程安全的变量</li>
+<li><code>strerror</code>可以把errno转换成对应字符串</li>
+<li><code>perror</code>可以直接打印出errno对应字符串</li>
+</ul>
+<h3 id="文件读写"><a href="#文件读写" class="headerlink" title="文件读写"></a>文件读写</h3><ul>
+<li><code>pread</code>和<code>pwrite</code>可以不用移动文件指针来读写文件</li>
+<li>读写2G以上的文件需要用<code>open64</code>打开</li>
+</ul>
+<h3 id="文件读写高级I-O"><a href="#文件读写高级I-O" class="headerlink" title="文件读写高级I/O"></a>文件读写高级I/O</h3><ul>
+<li><code>readv</code>,<code>writev</code> 可以一次操作多个缓冲区,提升效率,最多缓冲区个数定义在<code>UIO_MAXIOV</code> 中</li>
+<li>高级I/O函数也有<code>preadv</code>,<code>pwritev</code>,<code>preadv64</code>,<code>pwritev64</code></li>
+</ul>
+<h3 id="uid"><a href="#uid" class="headerlink" title="uid"></a>uid</h3><ul>
+<li>uid10000以上是app,1000是系统软件,0是root</li>
+<li><code>getpwuid</code>函数可以获取uid对应的用户名</li>
+<li><code>getgrgid</code>函数可以获取gid对应的组名</li>
+</ul>
+<h3 id="模式"><a href="#模式" class="headerlink" title="模式"></a>模式</h3><p>文件模式值结构</p>
+<p>T:不允许别人删除</p>
+<p>G:允许setgid</p>
+<p>S:允许setuid</p>
+<p><img src="/img/NDK2%20UNIX%E5%BC%80%E5%8F%91%20a07fe7748890495aa3652d4b16d17b80/Untitled%201.png" alt="Untitled"></p>
+<ul>
+<li>文件权限部分可以用8进制输出(格式化字符%o)以3位为间隔查看</li>
+<li>文件类型部分由如下常量组成</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//这里的数值都是8进制</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFMT 00170000</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFSOCK 0140000</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFLNK 0120000</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFREG 0100000</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFBLK 0060000</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFDIR 0040000</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFCHR 0020000</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFIFO 0010000</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//测试宏</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_ISLNK(m) (((m) &amp; S_IFMT) == S_IFLNK)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_ISREG(m) (((m) &amp; S_IFMT) == S_IFREG)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_ISDIR(m) (((m) &amp; S_IFMT) == S_IFDIR)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_ISCHR(m) (((m) &amp; S_IFMT) == S_IFCHR)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_ISBLK(m) (((m) &amp; S_IFMT) == S_IFBLK)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_ISFIFO(m) (((m) &amp; S_IFMT) == S_IFIFO)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_ISSOCK(m) (((m) &amp; S_IFMT) == S_IFSOCK)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>access</code>函数可以检查当前进程对文件是否有某个权限</li>
+<li><code>/system/</code>目录是只读挂载的,手机root之后可以解锁该目录的写权限</li>
+</ul>]]></content>
+      <categories>
+        <category>android</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>NDK学习1-NDK编译调试</title>
+    <url>/2021/12/15/NDK%E5%AD%A6%E4%B9%A01-NDK%E7%BC%96%E8%AF%91%E8%B0%83%E8%AF%95/</url>
+    <content><![CDATA[<p>ndk下载 <a href="https://developer.android.google.cn/ndk/downloads">NDK 下载 | Android NDK | Android Developers (google.cn)</a></p>
+<h3 id="设置环境变量"><a href="#设置环境变量" class="headerlink" title="设置环境变量"></a>设置环境变量</h3><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">NDK_ROOT D:\android-ndk-r23b</span><br><span class="line">%NDK_ROOT%</span><br><span class="line">%NDK_ROOT%\toolchains\llvm\prebuilt\windows-x86_64\bin</span><br><span class="line">%NDK_ROOT%\prebuilt\windows-x86_64\bin</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>clang需要指定链接库版本, 目录<code>%NDK_ROOT%\toolchains\llvm\prebuilt\windows-x86_64\bin</code>下有对应处理器平台和安卓平台封装好的clang脚本</li>
+</ul>
+<h3 id="makefile编译脚本"><a href="#makefile编译脚本" class="headerlink" title="makefile编译脚本"></a>makefile编译脚本</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">APP_ABI := armv7a</span><br><span class="line">APP_PLT := android21</span><br><span class="line">APP_BUILD_FLAG := -c</span><br><span class="line">APP_LINKER_FLAG := </span><br><span class="line">APP_SOURCE := hello.c</span><br><span class="line">APP_NAME := hello</span><br><span class="line"></span><br><span class="line">ifeq ($(APP_ABI),x86)</span><br><span class="line">	APP_ABI := i686</span><br><span class="line"><span class="keyword">else</span> ifeq ($(APP_ABI),armv7a)</span><br><span class="line">	APP_PLT := $(subst android,androideabi,<span class="variable">$&#123;APP_PLT&#125;</span>)</span><br><span class="line">endif</span><br><span class="line"></span><br><span class="line">ifeq ($(APP_ABI),arm64)</span><br><span class="line">	APP_ABI := aarch64</span><br><span class="line">endif</span><br><span class="line"></span><br><span class="line">APP_CLANG := <span class="variable">$&#123;APP_ABI&#125;</span>-linux-<span class="variable">$&#123;APP_PLT&#125;</span>-clang</span><br><span class="line"></span><br><span class="line">all:</span><br><span class="line">	<span class="variable">$&#123;APP_CLANG&#125;</span> <span class="variable">$&#123;APP_BUILD_FLAG&#125;</span> <span class="variable">$&#123;APP_SOURCE&#125;</span></span><br><span class="line">	<span class="variable">$&#123;APP_CLANG&#125;</span> <span class="variable">$&#123;APP_LINKER_FLAG&#125;</span> -o <span class="variable">$&#123;APP_NAME&#125;</span> *.o</span><br><span class="line">install:</span><br><span class="line">	adb push hello /data/cs/hello</span><br><span class="line">	adb shell chmod 777 /data/cs/hello</span><br><span class="line">clean:</span><br><span class="line">	del *.o</span><br></pre></td></tr></table></figure>
+
+<p>make -f build.mk</p>
+<p>如果想c++兼容多平台,可以再apk包lib文件夹下新建对应指令集的文件夹,放入对应的so文件即可</p>
+<p>c/c++库最终会在apk文件里的lib目录下</p>
+<h3 id="ndk编译"><a href="#ndk编译" class="headerlink" title="ndk编译"></a>ndk编译</h3><ol>
+<li>建立一个jni文件放置整个要编译的项目</li>
+<li>建立Android.mk文件</li>
+<li>建立Application.mk文件,用来进行项目级设置</li>
+<li>运行ndk-build即可编译</li>
+</ol>
+<p>编译后产生obj文件夹和libs文件夹,<strong>obj文件夹里面存放的带符号的可执行文件,libs里是不带符号的</strong></p>
+<h3 id="ndk调试"><a href="#ndk调试" class="headerlink" title="ndk调试"></a>ndk调试</h3><ul>
+<li>ndk使用lldb进行调试,lldb-server在<code>ndk\toolchains\llvm\prebuilt\windows-x86_64\lib64\clang\12.0.8\lib\linux\i386</code>目录下,将他push进手机中</li>
+<li>lldb-server必须要root权限才能调试,使用命令<code>su</code>提权至root</li>
+<li>运行命令<code>lldb-server g 127.0.0.1:12345 /data/tmp/hello</code> ,等待调试机连接</li>
+<li>使用adb将手机调试端口映射到调试机上 <code>adb forward tcp:12345 tcp:12345</code></li>
+<li>调试机运行lldb.cmd命令,输入<code>gdb-remote 127.0.0.1:12345</code> 即可调试</li>
+<li>如需源码级调试,lldb.cmd命令后面加上带符号的可执行文件路径,如<code>lldb.cmd .\hello</code></li>
+</ul>
+<p>也可以用IDA调试</p>]]></content>
+      <categories>
+        <category>android</category>
+      </categories>
+  </entry>
+  <entry>
     <title>VT 技术学习 (一) 检测支持与VMXON</title>
     <url>/2021/12/09/VT-%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0-%E4%B8%80-%E6%A3%80%E6%B5%8B%E6%94%AF%E6%8C%81%E4%B8%8EVMXON/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>对于部分反作弊对R3注入的强检测,R0层的技术已经无力应对了,必须得学会hypervisor了</p>
@@ -77,99 +170,6 @@
 <p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
       <categories>
         <category>dev</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>NDK学习1-NDK编译调试</title>
-    <url>/2021/12/15/NDK%E5%AD%A6%E4%B9%A01-NDK%E7%BC%96%E8%AF%91%E8%B0%83%E8%AF%95/</url>
-    <content><![CDATA[<p>ndk下载 <a href="https://developer.android.google.cn/ndk/downloads">NDK 下载 | Android NDK | Android Developers (google.cn)</a></p>
-<h3 id="设置环境变量"><a href="#设置环境变量" class="headerlink" title="设置环境变量"></a>设置环境变量</h3><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">NDK_ROOT D:\android-ndk-r23b</span><br><span class="line">%NDK_ROOT%</span><br><span class="line">%NDK_ROOT%\toolchains\llvm\prebuilt\windows-x86_64\bin</span><br><span class="line">%NDK_ROOT%\prebuilt\windows-x86_64\bin</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>clang需要指定链接库版本, 目录<code>%NDK_ROOT%\toolchains\llvm\prebuilt\windows-x86_64\bin</code>下有对应处理器平台和安卓平台封装好的clang脚本</li>
-</ul>
-<h3 id="makefile编译脚本"><a href="#makefile编译脚本" class="headerlink" title="makefile编译脚本"></a>makefile编译脚本</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">APP_ABI := armv7a</span><br><span class="line">APP_PLT := android21</span><br><span class="line">APP_BUILD_FLAG := -c</span><br><span class="line">APP_LINKER_FLAG := </span><br><span class="line">APP_SOURCE := hello.c</span><br><span class="line">APP_NAME := hello</span><br><span class="line"></span><br><span class="line">ifeq ($(APP_ABI),x86)</span><br><span class="line">	APP_ABI := i686</span><br><span class="line"><span class="keyword">else</span> ifeq ($(APP_ABI),armv7a)</span><br><span class="line">	APP_PLT := $(subst android,androideabi,<span class="variable">$&#123;APP_PLT&#125;</span>)</span><br><span class="line">endif</span><br><span class="line"></span><br><span class="line">ifeq ($(APP_ABI),arm64)</span><br><span class="line">	APP_ABI := aarch64</span><br><span class="line">endif</span><br><span class="line"></span><br><span class="line">APP_CLANG := <span class="variable">$&#123;APP_ABI&#125;</span>-linux-<span class="variable">$&#123;APP_PLT&#125;</span>-clang</span><br><span class="line"></span><br><span class="line">all:</span><br><span class="line">	<span class="variable">$&#123;APP_CLANG&#125;</span> <span class="variable">$&#123;APP_BUILD_FLAG&#125;</span> <span class="variable">$&#123;APP_SOURCE&#125;</span></span><br><span class="line">	<span class="variable">$&#123;APP_CLANG&#125;</span> <span class="variable">$&#123;APP_LINKER_FLAG&#125;</span> -o <span class="variable">$&#123;APP_NAME&#125;</span> *.o</span><br><span class="line">install:</span><br><span class="line">	adb push hello /data/cs/hello</span><br><span class="line">	adb shell chmod 777 /data/cs/hello</span><br><span class="line">clean:</span><br><span class="line">	del *.o</span><br></pre></td></tr></table></figure>
-
-<p>make -f build.mk</p>
-<p>如果想c++兼容多平台,可以再apk包lib文件夹下新建对应指令集的文件夹,放入对应的so文件即可</p>
-<p>c/c++库最终会在apk文件里的lib目录下</p>
-<h3 id="ndk编译"><a href="#ndk编译" class="headerlink" title="ndk编译"></a>ndk编译</h3><ol>
-<li>建立一个jni文件放置整个要编译的项目</li>
-<li>建立Android.mk文件</li>
-<li>建立Application.mk文件,用来进行项目级设置</li>
-<li>运行ndk-build即可编译</li>
-</ol>
-<p>编译后产生obj文件夹和libs文件夹,<strong>obj文件夹里面存放的带符号的可执行文件,libs里是不带符号的</strong></p>
-<h3 id="ndk调试"><a href="#ndk调试" class="headerlink" title="ndk调试"></a>ndk调试</h3><ul>
-<li>ndk使用lldb进行调试,lldb-server在<code>ndk\toolchains\llvm\prebuilt\windows-x86_64\lib64\clang\12.0.8\lib\linux\i386</code>目录下,将他push进手机中</li>
-<li>lldb-server必须要root权限才能调试,使用命令<code>su</code>提权至root</li>
-<li>运行命令<code>lldb-server g 127.0.0.1:12345 /data/tmp/hello</code> ,等待调试机连接</li>
-<li>使用adb将手机调试端口映射到调试机上 <code>adb forward tcp:12345 tcp:12345</code></li>
-<li>调试机运行lldb.cmd命令,输入<code>gdb-remote 127.0.0.1:12345</code> 即可调试</li>
-<li>如需源码级调试,lldb.cmd命令后面加上带符号的可执行文件路径,如<code>lldb.cmd .\hello</code></li>
-</ul>
-<p>也可以用IDA调试</p>]]></content>
-      <categories>
-        <category>android</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>NDK学习2-UNIX开发</title>
-    <url>/2021/12/15/NDK%E5%AD%A6%E4%B9%A02-UNIX%E5%BC%80%E5%8F%91/</url>
-    <content><![CDATA[<p>android_mk说明 <a href="https://developer.android.google.cn/ndk/guides/android_mk">https://developer.android.google.cn/ndk/guides/android_mk</a></p>
-<h3 id="NDK中使用C"><a href="#NDK中使用C" class="headerlink" title="NDK中使用C++"></a>NDK中使用C++</h3><p><a href="https://developer.android.google.cn/ndk/guides/cpp-support">https://developer.android.google.cn/ndk/guides/cpp-support</a></p>
-<ul>
-<li>如想要整个项目支持使用c++,可以在<code>Application.mk</code>添加<code>APP_STL := c++_static</code></li>
-</ul>
-<p><code>c++_static</code> 可以使得so自带C++STL库,使用 <code>c++_shared</code>选项会在生成目录下多出一个<code>libc++_shared.so</code>的C++STL库文件</p>
-<ul>
-<li>如想要整个项目支持c++异常,可以在<code>Application.mk</code>添加<code>APP_CPPFLAGS := -fexceptions</code>,部分版本ndk需要在gradle里添加<code>cppFlags &#39;-frtti&#39;</code>才可使用异常</li>
-<li>如果想要改c++标准, 添加cppFlags <code>cppFlags &#39;-std=c++11&#39;</code></li>
-</ul>
-<h3 id="AS-NDK项目"><a href="#AS-NDK项目" class="headerlink" title="AS NDK项目"></a>AS NDK项目</h3><ul>
-<li>可以在gradle里加上 <code>abiFilters &quot;x86&quot;,&quot;x86_64&quot;</code> 来限制编译指令平台</li>
-</ul>
-<p><img src="/img/NDK2%20UNIX%E5%BC%80%E5%8F%91%20a07fe7748890495aa3652d4b16d17b80/Untitled.png" alt="Untitled"></p>
-<h2 id="Android-Linux开发"><a href="#Android-Linux开发" class="headerlink" title="Android Linux开发"></a>Android Linux开发</h2><ul>
-<li>POSIX标准是最基本的开发接口,大部分操作系统都支持</li>
-<li><code>thread_local</code>关键字可定义一个TLS变量,解决线程安全的问题</li>
-<li>unix编程推荐查询书籍 <strong>《Linux/UNIX系统编程手册》</strong></li>
-</ul>
-<h3 id="erron"><a href="#erron" class="headerlink" title="erron"></a>erron</h3><ul>
-<li>和windows的GetLastError机制类似,linux使用<code>errno</code>全局变量存储api调用失败的错误码,头文件引用<code>#include &lt;errno.h&gt;</code> 即可引用该变量,errno是一个线程安全的变量</li>
-<li><code>strerror</code>可以把errno转换成对应字符串</li>
-<li><code>perror</code>可以直接打印出errno对应字符串</li>
-</ul>
-<h3 id="文件读写"><a href="#文件读写" class="headerlink" title="文件读写"></a>文件读写</h3><ul>
-<li><code>pread</code>和<code>pwrite</code>可以不用移动文件指针来读写文件</li>
-<li>读写2G以上的文件需要用<code>open64</code>打开</li>
-</ul>
-<h3 id="文件读写高级I-O"><a href="#文件读写高级I-O" class="headerlink" title="文件读写高级I/O"></a>文件读写高级I/O</h3><ul>
-<li><code>readv</code>,<code>writev</code> 可以一次操作多个缓冲区,提升效率,最多缓冲区个数定义在<code>UIO_MAXIOV</code> 中</li>
-<li>高级I/O函数也有<code>preadv</code>,<code>pwritev</code>,<code>preadv64</code>,<code>pwritev64</code></li>
-</ul>
-<h3 id="uid"><a href="#uid" class="headerlink" title="uid"></a>uid</h3><ul>
-<li>uid10000以上是app,1000是系统软件,0是root</li>
-<li><code>getpwuid</code>函数可以获取uid对应的用户名</li>
-<li><code>getgrgid</code>函数可以获取gid对应的组名</li>
-</ul>
-<h3 id="模式"><a href="#模式" class="headerlink" title="模式"></a>模式</h3><p>文件模式值结构</p>
-<p>T:不允许别人删除</p>
-<p>G:允许setgid</p>
-<p>S:允许setuid</p>
-<p><img src="/img/NDK2%20UNIX%E5%BC%80%E5%8F%91%20a07fe7748890495aa3652d4b16d17b80/Untitled%201.png" alt="Untitled"></p>
-<ul>
-<li>文件权限部分可以用8进制输出(格式化字符%o)以3位为间隔查看</li>
-<li>文件类型部分由如下常量组成</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//这里的数值都是8进制</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFMT 00170000</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFSOCK 0140000</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFLNK 0120000</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFREG 0100000</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFBLK 0060000</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFDIR 0040000</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFCHR 0020000</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFIFO 0010000</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//测试宏</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_ISLNK(m) (((m) &amp; S_IFMT) == S_IFLNK)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_ISREG(m) (((m) &amp; S_IFMT) == S_IFREG)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_ISDIR(m) (((m) &amp; S_IFMT) == S_IFDIR)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_ISCHR(m) (((m) &amp; S_IFMT) == S_IFCHR)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_ISBLK(m) (((m) &amp; S_IFMT) == S_IFBLK)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_ISFIFO(m) (((m) &amp; S_IFMT) == S_IFIFO)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_ISSOCK(m) (((m) &amp; S_IFMT) == S_IFSOCK)</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><code>access</code>函数可以检查当前进程对文件是否有某个权限</li>
-<li><code>/system/</code>目录是只读挂载的,手机root之后可以解锁该目录的写权限</li>
-</ul>]]></content>
-      <categories>
-        <category>android</category>
       </categories>
   </entry>
 </search>
