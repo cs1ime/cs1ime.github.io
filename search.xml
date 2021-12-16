@@ -51,12 +51,12 @@
 <li>可以在gradle里加上 <code>abiFilters &quot;x86&quot;,&quot;x86_64&quot;</code> 来限制编译指令平台</li>
 </ul>
 <p><img src="/img/NDK2%20UNIX%E5%BC%80%E5%8F%91%20a07fe7748890495aa3652d4b16d17b80/Untitled.png" alt="Untitled"></p>
-<h2 id="Android-Linux开发"><a href="#Android-Linux开发" class="headerlink" title="Android Linux开发"></a>Android Linux开发</h2><ul>
+<h3 id="Android-Linux开发"><a href="#Android-Linux开发" class="headerlink" title="Android Linux开发"></a>Android Linux开发</h3><ul>
 <li>POSIX标准是最基本的开发接口,大部分操作系统都支持</li>
 <li><code>thread_local</code>关键字可定义一个TLS变量,解决线程安全的问题</li>
 <li>unix编程推荐查询书籍 <strong>《Linux/UNIX系统编程手册》</strong></li>
 </ul>
-<h3 id="erron"><a href="#erron" class="headerlink" title="erron"></a>erron</h3><ul>
+<h3 id="errno"><a href="#errno" class="headerlink" title="errno"></a>errno</h3><ul>
 <li>和windows的GetLastError机制类似,linux使用<code>errno</code>全局变量存储api调用失败的错误码,头文件引用<code>#include &lt;errno.h&gt;</code> 即可引用该变量,errno是一个线程安全的变量</li>
 <li><code>strerror</code>可以把errno转换成对应字符串</li>
 <li><code>perror</code>可以直接打印出errno对应字符串</li>
