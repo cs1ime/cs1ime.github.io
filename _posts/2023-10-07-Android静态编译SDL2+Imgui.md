@@ -1,11 +1,9 @@
-```yaml
 ---
 title: NDK静态编译SDL2+Imgui
 date: 2023-10-07 12:34:00 +0800
 categories: [Android]
 tags: [Android]     # TAG names should always be 
 ---
-```
 
 # NDK静态编译SDL2+Imgui
 
